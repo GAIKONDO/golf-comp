@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Group, PlayerScore } from '@/types';
-import { addGroup, addPlayer } from '@/utils/storage';
+import { addGroup, addPlayer } from '@/utils/supabase';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface GroupManagerProps {
@@ -16,47 +16,18 @@ export default function GroupManager({ groups, onGroupsChange, onScoresChange }:
   const [newPlayerName, setNewPlayerName] = useState('');
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
-  const handleAddGroup = () => {
+  const handleAddGroup = async () => {
     if (newGroupName.trim()) {
-      const updatedGroups = addGroup(groups, newGroupName.trim());
+      const updatedGroups = await addGroup(groups, newGroupName.trim());
       onGroupsChange(updatedGroups);
       setNewGroupName('');
     }
   };
 
-  const handleAddPlayer = () => {
+  const handleAddPlayer = async () => {
     if (selectedGroupId && newPlayerName.trim()) {
-      const updatedGroups = addPlayer(groups, selectedGroupId, newPlayerName.trim());
+      const updatedGroups = await addPlayer(groups, selectedGroupId, newPlayerName.trim());
       onGroupsChange(updatedGroups);
-      
-      // 新しいプレイヤーのスコアエントリを作成
-      const newPlayer = updatedGroups
-        .find(g => g.id === selectedGroupId)
-        ?.players.find(p => p.name === newPlayerName.trim());
-      
-      if (newPlayer) {
-        const newScore: PlayerScore = {
-          playerId: newPlayer.id,
-          playerName: newPlayer.name,
-          groupId: selectedGroupId,
-          groupName: groups.find(g => g.id === selectedGroupId)?.name || '',
-          scores: [],
-          totalScore: 0,
-          totalPar: 0,
-          netScore: 0
-        };
-        onScoresChange([...groups.flatMap(g => g.players.map(p => ({
-          playerId: p.id,
-          playerName: p.name,
-          groupId: g.id,
-          groupName: g.name,
-          scores: [],
-          totalScore: 0,
-          totalPar: 0,
-          netScore: 0
-        }))), newScore]);
-      }
-      
       setNewPlayerName('');
     }
   };

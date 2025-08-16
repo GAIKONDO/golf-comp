@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ゴルフコンペ - リアルタイムスコア管理システム
 
-## Getting Started
+参加者全員でリアルタイムにスコアを共有・管理できるゴルフコンペ専用アプリケーションです。
 
-First, run the development server:
+## 機能
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 🏌️ 組とプレイヤーの管理
+- 📊 18ホールのスコア入力
+- 🏆 リアルタイムランキング表示
+- 📱 スマホ対応のレスポンシブデザイン
+- 🔄 リアルタイムデータ同期（Supabase使用）
+
+## 技術スタック
+
+- **フロントエンド**: Next.js 15, TypeScript, Tailwind CSS
+- **データベース**: Supabase (PostgreSQL)
+- **リアルタイム同期**: Supabase Realtime
+- **デプロイ**: Vercel
+
+## セットアップ手順
+
+### 1. Supabaseプロジェクトの作成
+
+1. [Supabase](https://supabase.com)にアクセスしてアカウントを作成
+2. 新しいプロジェクトを作成
+3. プロジェクトの設定から以下を取得：
+   - Project URL
+   - anon/public key
+
+### 2. データベーステーブルの作成
+
+SupabaseのSQL Editorで以下のSQLを実行：
+
+```sql
+-- アプリケーション状態を保存するテーブル
+CREATE TABLE app_state (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  groups JSONB DEFAULT '[]'::jsonb,
+  scores JSONB DEFAULT '[]'::jsonb,
+  current_hole INTEGER DEFAULT 1,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- リアルタイム機能を有効化
+ALTER TABLE app_state REPLICA IDENTITY FULL;
+ALTER PUBLICATION supabase_realtime ADD TABLE app_state;
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. 環境変数の設定
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+プロジェクトルートに`.env.local`ファイルを作成：
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## Learn More
+### 4. アプリケーションの起動
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 使用方法
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **組の追加**: 組名を入力して「追加」ボタンをクリック
+2. **プレイヤーの追加**: 組を選択してプレイヤー名を入力
+3. **スコア入力**: 各ホールのパーとスコアを入力
+4. **リアルタイム確認**: 他のデバイスでリアルタイムにスコアを確認
 
-## Deploy on Vercel
+## デプロイ
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Vercelでデプロイする場合：
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. GitHubリポジトリをVercelに連携
+2. 環境変数をVercelのダッシュボードで設定
+3. 自動デプロイが開始されます
+
+## ライセンス
+
+MIT License

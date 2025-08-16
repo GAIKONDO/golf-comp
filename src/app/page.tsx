@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { AppState } from '@/types';
-import { loadFromStorage, saveToStorage, getRanking } from '@/utils/storage';
+import { getAppState, saveAppState, subscribeToAppState, getRanking } from '@/utils/supabase';
 import GroupManager from '@/components/GroupManager';
 import ScoreInput from '@/components/ScoreInput';
 import RankingDisplay from '@/components/RankingDisplay';
@@ -14,15 +14,34 @@ export default function Home() {
     currentHole: 1
   });
 
-  // 初期データの読み込み
+  // 初期データの読み込みとリアルタイム同期
   useEffect(() => {
-    const savedData = loadFromStorage();
-    setAppState(savedData);
+    const loadData = async () => {
+      const savedData = await getAppState();
+      setAppState(savedData);
+    };
+    
+    loadData();
+
+    // リアルタイムでデータの変更を監視
+    const subscription = subscribeToAppState((newAppState) => {
+      setAppState(newAppState);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // データが変更されたら保存
   useEffect(() => {
-    saveToStorage(appState);
+    const saveData = async () => {
+      await saveAppState(appState);
+    };
+    
+    if (appState.groups.length > 0 || appState.scores.length > 0) {
+      saveData();
+    }
   }, [appState]);
 
   const updateAppState = (newState: Partial<AppState>) => {
