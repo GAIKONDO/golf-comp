@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Group } from '@/types';
-import { addGroup, addPlayer } from '@/utils/storage';
+import { addGroup, addPlayer } from '@/utils/supabase';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 
 interface GroupManagerProps {
@@ -16,17 +16,17 @@ export default function GroupManager({ groups, onGroupsChange }: GroupManagerPro
   const [newPlayerName, setNewPlayerName] = useState('');
   const [selectedGroupId, setSelectedGroupId] = useState('');
 
-  const handleAddGroup = () => {
+  const handleAddGroup = async () => {
     if (newGroupName.trim()) {
-      const updatedGroups = addGroup(groups, newGroupName.trim());
+      const updatedGroups = await addGroup(groups, newGroupName.trim());
       onGroupsChange(updatedGroups);
       setNewGroupName('');
     }
   };
 
-  const handleAddPlayer = () => {
+  const handleAddPlayer = async () => {
     if (selectedGroupId && newPlayerName.trim()) {
-      const updatedGroups = addPlayer(groups, selectedGroupId, newPlayerName.trim());
+      const updatedGroups = await addPlayer(groups, selectedGroupId, newPlayerName.trim());
       onGroupsChange(updatedGroups);
       setNewPlayerName('');
     }
