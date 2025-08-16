@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AppState, Group, PlayerScore } from '@/types';
+import { AppState } from '@/types';
 import { loadFromStorage, saveToStorage, getRanking } from '@/utils/storage';
 import GroupManager from '@/components/GroupManager';
 import ScoreInput from '@/components/ScoreInput';

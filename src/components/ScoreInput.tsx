@@ -74,7 +74,7 @@ export default function ScoreInput({
     const group = groups.find(g => g.id === groupId);
     if (!group) return;
 
-    let updatedScores = [...scores];
+    const updatedScores = [...scores];
     const newConfirmedScores = { ...confirmedScores };
 
     group.players.forEach(player => {
@@ -247,7 +247,7 @@ export default function ScoreInput({
                     const totalScore = getPlayerTotalScore(player.id);
                     const netScore = getPlayerNetScore(player.id);
                     const par = getDefaultPar(player.id);
-                    const defaultScore = getDefaultScore(player.id);
+
                     const scoreConfirmed = isScoreConfirmed(player.id);
                     const currentScore = getCurrentScore(player.id);
                     const playerProgress = getPlayerProgress(player.id);
