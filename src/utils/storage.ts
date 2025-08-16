@@ -66,32 +66,47 @@ export const updateScore = (
   score: number,
   par: number
 ): PlayerScore[] => {
-  return scores.map(playerScore => {
-    if (playerScore.playerId === playerId) {
-      const updatedScores = playerScore.scores.map(holeScore => 
-        holeScore.holeNumber === holeNumber 
-          ? { ...holeScore, score, par }
-          : holeScore
-      );
-      
-      // 新しいホールのスコアを追加（存在しない場合）
-      if (!updatedScores.find(s => s.holeNumber === holeNumber)) {
-        updatedScores.push({ holeNumber, score, par });
-      }
-      
-      const totalScore = updatedScores.reduce((sum, hole) => sum + hole.score, 0);
-      const totalPar = updatedScores.reduce((sum, hole) => sum + hole.par, 0);
-      
-      return {
-        ...playerScore,
-        scores: updatedScores,
-        totalScore,
-        totalPar,
-        netScore: totalScore - totalPar
-      };
+  let updatedScores = [...scores];
+  const existingPlayerScore = updatedScores.find(s => s.playerId === playerId);
+
+  if (existingPlayerScore) {
+    // 既存のプレイヤーのスコアを更新
+    const existingHoleScore = existingPlayerScore.scores.find(s => s.holeNumber === holeNumber);
+    if (existingHoleScore) {
+      existingHoleScore.score = score;
+      existingHoleScore.par = par;
+    } else {
+      existingPlayerScore.scores.push({ holeNumber, score, par });
     }
-    return playerScore;
-  });
+
+    // 合計スコアを再計算
+    const totalScore = existingPlayerScore.scores.reduce((sum, hole) => sum + hole.score, 0);
+    const totalPar = existingPlayerScore.scores.reduce((sum, hole) => sum + hole.par, 0);
+    existingPlayerScore.totalScore = totalScore;
+    existingPlayerScore.totalPar = totalPar;
+    existingPlayerScore.netScore = totalScore - totalPar;
+  } else {
+    // 新しいプレイヤーのスコアを作成
+    const groups = loadFromStorage().groups;
+    const player = groups.flatMap(g => g.players).find(p => p.id === playerId);
+    const group = groups.find(g => g.players.some(p => p.id === playerId));
+
+    if (player && group) {
+      const newPlayerScore: PlayerScore = {
+        playerId: player.id,
+        playerName: player.name,
+        groupId: group.id,
+        groupName: group.name,
+        scores: [{ holeNumber, score, par }],
+        totalScore: score,
+        totalPar: par,
+        netScore: score - par
+      };
+      updatedScores.push(newPlayerScore);
+    }
+  }
+
+  return updatedScores;
 };
 
 // ランキングを取得（オリンピック形式）
