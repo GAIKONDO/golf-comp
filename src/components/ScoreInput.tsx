@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Group, PlayerScore } from '@/types';
-import { updateScore } from '@/utils/supabase';
+import { updateScore } from '@/utils/storage';
 import { ChevronLeftIcon, ChevronRightIcon, CheckIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
 interface ScoreInputProps {
@@ -25,9 +25,9 @@ export default function ScoreInput({
 
   const allPlayers = groups.flatMap(group => group.players);
 
-  const handleScoreChange = async (playerId: string, score: number) => {
+  const handleScoreChange = (playerId: string, score: number) => {
     const par = parInputs[playerId] || 4; // デフォルトパー4
-    const updatedScores = await updateScore(scores, playerId, currentHole, score, par);
+    const updatedScores = updateScore(scores, playerId, currentHole, score, par);
     onScoresChange(updatedScores);
   };
 
