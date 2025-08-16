@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Group, PlayerScore } from '@/types';
+import { Group } from '@/types';
 import { addGroup, addPlayer } from '@/utils/supabase';
 import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 

@@ -70,7 +70,6 @@ export default function Home() {
             <GroupManager 
               groups={appState.groups}
               onGroupsChange={(groups) => updateAppState({ groups })}
-              onScoresChange={(scores) => updateAppState({ scores })}
             />
             
             <ScoreInput 
