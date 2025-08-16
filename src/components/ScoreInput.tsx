@@ -129,14 +129,7 @@ export default function ScoreInput({
     return parInputs[playerId] || 4;
   };
 
-  const getDefaultScore = (playerId: string) => {
-    const holeScore = getPlayerScore(playerId);
-    if (holeScore) {
-      return holeScore.score;
-    }
-    // スコアが未入力の場合はパーをデフォルト値として表示
-    return getDefaultPar(playerId);
-  };
+
 
   const isScoreConfirmed = (playerId: string) => {
     return confirmedScores[playerId]?.[currentHole] || false;

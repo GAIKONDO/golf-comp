@@ -104,7 +104,7 @@ export const updateScore = async (
   score: number,
   par: number
 ): Promise<PlayerScore[]> => {
-  let updatedScores = [...scores];
+  const updatedScores = [...scores];
   const existingPlayerScore = updatedScores.find(s => s.playerId === playerId);
 
   if (existingPlayerScore) {

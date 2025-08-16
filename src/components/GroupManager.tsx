@@ -8,10 +8,10 @@ import { PlusIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 interface GroupManagerProps {
   groups: Group[];
   onGroupsChange: (groups: Group[]) => void;
-  onScoresChange: (scores: PlayerScore[]) => void;
+
 }
 
-export default function GroupManager({ groups, onGroupsChange, onScoresChange }: GroupManagerProps) {
+export default function GroupManager({ groups, onGroupsChange }: GroupManagerProps) {
   const [newGroupName, setNewGroupName] = useState('');
   const [newPlayerName, setNewPlayerName] = useState('');
   const [selectedGroupId, setSelectedGroupId] = useState('');
