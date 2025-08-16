@@ -56,7 +56,7 @@ export default function Home() {
         {/* ヘッダー */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            🏌️ ゴルフコンペ - リアルタイム共有版
+            🏌️ ゴルフコンペ - リアルタイム共有版 v2
           </h1>
           <p className="text-gray-600">
             リアルタイムスコア管理システム
