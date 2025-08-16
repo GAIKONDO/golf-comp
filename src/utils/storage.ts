@@ -67,7 +67,7 @@ export const updateScore = (
   par: number,
   groups: Group[] = []
 ): PlayerScore[] => {
-  const updatedScores = [...scores];
+  let updatedScores = [...scores];
   const existingPlayerScore = updatedScores.find(s => s.playerId === playerId);
 
   if (existingPlayerScore) {
