@@ -27,7 +27,7 @@ export default function ScoreInput({
 
   const handleScoreChange = (playerId: string, score: number) => {
     const par = parInputs[playerId] || 4; // デフォルトパー4
-    const updatedScores = updateScore(scores, playerId, currentHole, score, par);
+    const updatedScores = updateScore(scores, playerId, currentHole, score, par, groups);
     onScoresChange(updatedScores);
   };
 
@@ -39,7 +39,7 @@ export default function ScoreInput({
     if (existingScore) {
       const holeScore = existingScore.scores.find(s => s.holeNumber === currentHole);
       if (holeScore) {
-        const updatedScores = updateScore(scores, playerId, currentHole, holeScore.score, par);
+        const updatedScores = updateScore(scores, playerId, currentHole, holeScore.score, par, groups);
         onScoresChange(updatedScores);
       }
     }
@@ -55,8 +55,8 @@ export default function ScoreInput({
     group.players.forEach(player => {
       const currentScore = getCurrentScore(player.id);
       if (currentScore !== null) {
-        const par = getDefaultPar(player.id);
-        updatedScores = updateScore(updatedScores, player.id, currentHole, currentScore, par);
+              const par = getDefaultPar(player.id);
+      updatedScores = updateScore(updatedScores, player.id, currentHole, currentScore, par, groups);
         
         // 確定状態を更新
         newConfirmedScores[player.id] = {

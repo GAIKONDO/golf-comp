@@ -64,7 +64,8 @@ export const updateScore = (
   playerId: string,
   holeNumber: number,
   score: number,
-  par: number
+  par: number,
+  groups: Group[] = []
 ): PlayerScore[] => {
   let updatedScores = [...scores];
   const existingPlayerScore = updatedScores.find(s => s.playerId === playerId);
@@ -87,7 +88,6 @@ export const updateScore = (
     existingPlayerScore.netScore = totalScore - totalPar;
   } else {
     // 新しいプレイヤーのスコアを作成
-    const groups = loadFromStorage().groups;
     const player = groups.flatMap(g => g.players).find(p => p.id === playerId);
     const group = groups.find(g => g.players.some(p => p.id === playerId));
 
