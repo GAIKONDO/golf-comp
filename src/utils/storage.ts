@@ -67,6 +67,7 @@ export const updateScore = (
   par: number,
   groups: Group[] = []
 ): PlayerScore[] => {
+  // eslint-disable-next-line prefer-const
   let updatedScores = [...scores];
   const existingPlayerScore = updatedScores.find(s => s.playerId === playerId);
 

@@ -105,6 +105,7 @@ export const updateScore = async (
   par: number,
   groups: Group[] = []
 ): Promise<PlayerScore[]> => {
+  // eslint-disable-next-line prefer-const
   let updatedScores = [...scores];
   const existingPlayerScore = updatedScores.find(s => s.playerId === playerId);
 
